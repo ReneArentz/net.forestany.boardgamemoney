@@ -1,0 +1,3 @@
+Version Highlights:
+
+- First release of board game money application for android

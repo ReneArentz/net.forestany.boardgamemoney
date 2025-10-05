@@ -1,0 +1,68 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/settings_category_general">
+
+        <ListPreference
+            app:defaultValue="en"
+            app:entries="@array/locale_entries"
+            app:entryValues="@array/locale_values"
+            app:key="general_locale"
+            app:title="@string/settings_general_locale"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="general_currency_text"
+            app:title="@string/settings_general_currency_text"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            app:key="general_show_events"
+            app:title="@string/settings_general_show_events"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_category_udp_settings">
+
+        <EditTextPreference
+            app:key="udp_network_interface_name"
+            app:title="@string/settings_udp_network_interface_name"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="udp_multicast_ip"
+            app:title="@string/settings_udp_multicast_ip"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="udp_multicast_port"
+            app:title="@string/settings_udp_multicast_port"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="udp_multicast_ttl"
+            app:title="@string/settings_udp_multicast_ttl"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_category_tcp_settings">
+
+        <EditTextPreference
+            app:key="tcp_server_port"
+            app:title="@string/settings_tcp_server_port"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:key="tcp_common_passphrase"
+            app:title="@string/settings_tcp_common_passphrase"
+            app:useSimpleSummaryProvider="false" />
+
+        <SwitchPreferenceCompat
+            app:key="tcp_encryption"
+            app:title="@string/settings_tcp_encryption"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

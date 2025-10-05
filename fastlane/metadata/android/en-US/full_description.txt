@@ -1,0 +1,11 @@
+This app replaces traditional paper money used in board games with a simple, intuitive digital system. Each player can choose a unique color and manage their own funds directly within the app. One player can act as the bank, or a single device can handle both the bank and all players together - perfect for shared tablets or pass-and-play setups.
+
+You can connect to one another in two ways:
+- Automatic discovery: Find available game rooms automatically using UDP multicast over local wifi.
+- Manual connection: Enter the known IP address and port of another device in the local wifi to connect directly.
+
+Players can transfer money to each other or to the bank with just a few taps, making it effortless to track balances and transactions throughout the game. The app automatically keeps a full ledger of all transfers, so everyone can see exactly what happened at any time - no confusion, no lost notes, no counting errors.
+
+You can run a complete game locally without any internet or network connection. Whether you're playing with friends around the same table or just want to simplify your next board game night, this app makes managing game money fast, fair, and fun.
+
+Built with Android (Java 21 + Kotlin) and powered by the developer's own lightweight framework, forestJ.

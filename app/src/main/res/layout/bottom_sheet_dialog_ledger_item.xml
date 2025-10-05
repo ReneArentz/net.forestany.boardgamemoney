@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ledgerEntryItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="12dp"
+    tools:ignore="HardcodedText">
+
+    <TextView
+        android:id="@+id/ledgerEntryIndex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#1"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/ledgerEntryFromColor"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ledgerEntryIndex"
+        android:layout_marginStart="8dp" />
+
+    <TextView
+        android:id="@+id/ledgerEntryFromName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Alice"
+        android:textSize="14sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ledgerEntryFromColor"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/arrow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="→"
+        android:textSize="16sp"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ledgerEntryFromName"
+        android:layout_marginStart="8dp" />
+
+    <TextView
+        android:id="@+id/ledgerEntryAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100 €"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/arrow1"
+        android:layout_marginStart="8dp" />
+
+    <TextView
+        android:id="@+id/arrow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="→"
+        android:textSize="16sp"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ledgerEntryAmount"
+        android:layout_marginStart="8dp" />
+
+    <TextView
+        android:id="@+id/ledgerEntryToName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bob"
+        android:textSize="14sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/arrow2"
+        android:layout_marginStart="8dp" />
+
+    <View
+        android:id="@+id/ledgerEntryToColor"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ledgerEntryToName"
+        android:layout_marginStart="8dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
