@@ -1,1 +1,1 @@
-A digital money manager for board games - handle all transactions easily without paper cash.
+Digital money manager for board games, handle all transactions easily.
