@@ -25,10 +25,11 @@ Built with Android (Java 21 + Kotlin) and powered by the developer's own lightwe
 
 ## Tech Stack
 
-- Android: Tested Android 36, Minimum Android 29
+- Android: Tested Android 36, Minimum Android 27
 - Language: Kotlin, Java 21
 - Framework: [forestJ](https://github.com/ReneArentz/forestJ)  
 - IDE: Android Studio Narwhal for Linux | 2025.1.1 Patch 1
+- IDE: Android Studio Panda 2 for Linux | 2025.3.2
 
 ---
 

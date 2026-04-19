@@ -35,8 +35,8 @@ class Other {
 
         val i_comAmount = 1
         val i_comMessageBoxLength = 1500
-        val i_comSenderTimeoutMs = 10000
-        val i_comReceiverTimeoutMs = 10000
+        val i_comSenderTimeoutMs = 5000
+        val i_comReceiverTimeoutMs = 5000
         val i_comSenderIntervalMs = 25
         val i_comQueueTimeoutMs = 25
         val i_comUDPReceiveAckTimeoutMs = 300
@@ -207,8 +207,6 @@ class Other {
                                 net.forestany.forestj.lib.Global.ilog("message enqueued: '$gameName|$localIp:$serverPort'")
                                 sleep(1000)
                             }
-                        } catch (o_exc: RuntimeException) {
-                            /* ignore if communication is not running */
                         } catch (o_exc: java.lang.Exception) {
                             net.forestany.forestj.lib.Global.logException(o_exc)
                         }
@@ -255,7 +253,7 @@ class Other {
                                     }
                                 }
 
-                                if (a_deleteEntries.size > 0) {
+                                if (a_deleteEntries.isNotEmpty()) {
                                     for (o_key in a_deleteEntries) {
                                         GlobalInstance.get().removeClientLobbyEntry(o_key)
                                     }
@@ -289,8 +287,6 @@ class Other {
 
                                 sleep(1000)
                             }
-                        } catch (o_exc: RuntimeException) {
-                            /* ignore if communication is not running */
                         } catch (o_exc: java.lang.Exception) {
                             net.forestany.forestj.lib.Global.logException(o_exc)
                         }
@@ -363,9 +359,14 @@ class Other {
                             this.cloneBasicFields(p_o_sourceTask)
                         }
 
+                        var start = System.currentTimeMillis()
+
                         @Throws(java.lang.Exception::class)
                         override fun runTask() {
                             try {
+                                /* update ping */
+                                GlobalInstance.get().setPing(System.currentTimeMillis() - start)
+
                                 /* get request object */
                                 val s_request = this.requestObject as String?
 
@@ -427,7 +428,7 @@ class Other {
                                 s_answer += "%"
 
                                 // gather all ledger entries
-                                if (GlobalInstance.get().getLedger().size > 0) {
+                                if (GlobalInstance.get().getLedger().isNotEmpty()) {
                                     for (ledger in GlobalInstance.get().getLedger()) {
                                         s_answer += "${ledger};"
                                     }
@@ -442,6 +443,8 @@ class Other {
                                 net.forestany.forestj.lib.Global.ilog("answer set: '$s_answer'")
                             } catch (o_exc: java.lang.Exception) {
                                 net.forestany.forestj.lib.Global.logException(o_exc)
+                            } finally {
+                                start = System.currentTimeMillis()
                             }
                         }
                     }
@@ -491,107 +494,110 @@ class Other {
                 override fun run() {
                     try {
                         while (true) {
-                            if (!GlobalInstance.get().b_isServer) { /* CLIENT only */
-                                // prepare request
-                                var s_request = ""
+                            if (GlobalInstance.get().b_isServer) { /* CLIENT only */
+                                break
+                            }
 
-                                if ( (GlobalInstance.get().getMessageBoxAmount() > 0) ) {
-                                    val o_message: Any? = GlobalInstance.get().currentMessage()
+                            // prepare request
+                            var s_request = ""
 
-                                    if (o_message != null) {
-                                        val s_message = o_message.toString()
+                            if ( (GlobalInstance.get().getMessageBoxAmount() > 0) ) {
+                                val o_message: Any? = GlobalInstance.get().currentMessage()
 
-                                        // check if message is in ledger
-                                        if (s_message.contains(":")) {
-                                            val a_foo = s_message.split(":")
+                                if (o_message != null) {
+                                    val s_message = o_message.toString()
 
-                                            // client message must contain 4 parts divided by ':'
+                                    // check if message is in ledger
+                                    if (s_message.contains(":")) {
+                                        val a_foo = s_message.split(":")
+
+                                        // client message must contain 4 parts divided by ':'
+                                        if (a_foo.size == 4) {
+                                            val tid = a_foo[0].toInt()
+                                            val from = a_foo[1]
+                                            val to = a_foo[2]
+                                            val amount = a_foo[3].toInt()
+
+                                            // check if it exists in ledger we received from server as answer to our previous requests
+                                            if (GlobalInstance.get().checkLedgerExists(Message(tid, from, to, amount), 0)) {
+                                                // dequeue message, and skip current iteration
+                                                GlobalInstance.get().dequeueMessageBox()
+                                                continue
+                                            }
+                                        }
+                                    }
+
+                                    // use current message of queue as server request
+                                    s_request = s_message
+                                }
+                            } else {
+                                // prepare ping message
+                                s_request = Message(0, "${GlobalInstance.get().s_user}${GlobalInstance.get().s_userColor}").toString()
+                            }
+
+                            // send request
+                            while (!GlobalInstance.get().o_communicationBank?.enqueue(s_request)!!) {
+                                net.forestany.forestj.lib.Global.ilogWarning("could not enqueue message")
+                            }
+
+                            net.forestany.forestj.lib.Global.ilog("message enqueued: '$s_request'")
+
+                            // wait for answer (communication_wait * 3)
+                            val start = System.currentTimeMillis()
+                            val o_answer: Any? = GlobalInstance.get().o_communicationBank?.dequeueWithWaitLoop(GlobalInstance.get().getPreferences()["communication_wait"].toString().toInt() * 3)
+                            val end = System.currentTimeMillis()
+                            GlobalInstance.get().setPing(end - start)
+
+                            if (o_answer != null) {
+                                val s_answer = o_answer.toString()
+                                net.forestany.forestj.lib.Global.ilog("answer from server: $s_answer")
+
+                                // answer from server are two parts, divided by '%'
+                                if (s_answer.contains("%")) {
+                                    val players = s_answer.substring(0, s_answer.indexOf("%"))
+                                    val ledger = s_answer.substring(s_answer.indexOf("%") + 1)
+
+                                    // iterate all players the server tells us
+                                    for (player in players.split(";")) {
+                                        if (player.contains(":")) {
+                                            val playerName = player.substring(0, player.indexOf(":"))
+                                            val playerColor = player.substring(player.indexOf(":") + 1)
+
+                                            // add player if it is not 'bank'
+                                            if (!playerName.lowercase().contentEquals("bank")) {
+                                                GlobalInstance.get().addPlayer(Player(playerName, playerColor, false))
+                                            }
+                                        }
+                                    }
+
+                                    GlobalInstance.get().clearLedger()
+
+                                    // iterate all ledger entries the server tells us
+                                    for (ledgerEntry in ledger.split(";")) {
+                                        if (ledgerEntry.contains(":")) {
+                                            val a_foo = ledgerEntry.split(":")
+
                                             if (a_foo.size == 4) {
                                                 val tid = a_foo[0].toInt()
                                                 val from = a_foo[1]
                                                 val to = a_foo[2]
                                                 val amount = a_foo[3].toInt()
 
-                                                // check if it exists in ledger we received from server as answer to our previous requests
-                                                if (GlobalInstance.get().checkLedgerExists(Message(tid, from, to, amount), 0)) {
-                                                    // dequeue message, and skip current iteration
-                                                    GlobalInstance.get().dequeueMessageBox()
-                                                    continue
+                                                if (tid == -1) {
+                                                    GlobalInstance.get().b_serverClosed = true
                                                 }
-                                            }
-                                        }
 
-                                        // use current message of queue as server request
-                                        s_request = s_message
-                                    }
-                                } else {
-                                    // prepare ping message
-                                    s_request = Message(0, "${GlobalInstance.get().s_user}${GlobalInstance.get().s_userColor}").toString()
-                                }
-
-                                // send request
-                                while (!GlobalInstance.get().o_communicationBank?.enqueue(s_request)!!) {
-                                    net.forestany.forestj.lib.Global.ilogWarning("could not enqueue message")
-                                }
-
-                                net.forestany.forestj.lib.Global.ilog("message enqueued: '$s_request'")
-
-                                // wait for answer
-                                val o_answer: Any? = GlobalInstance.get().o_communicationBank?.dequeueWithWaitLoop(2500)
-
-                                if (o_answer != null) {
-                                    val s_answer = o_answer.toString()
-                                    net.forestany.forestj.lib.Global.ilog("answer from server: $s_answer")
-
-                                    // answer from server are two parts, divided by '%'
-                                    if (s_answer.contains("%")) {
-                                        val players = s_answer.substring(0, s_answer.indexOf("%"))
-                                        val ledger = s_answer.substring(s_answer.indexOf("%") + 1)
-
-                                        // iterate all players the server tells us
-                                        for (player in players.split(";")) {
-                                            if (player.contains(":")) {
-                                                val playerName = player.substring(0, player.indexOf(":"))
-                                                val playerColor = player.substring(player.indexOf(":") + 1)
-
-                                                // add player if it is not 'bank'
-                                                if (!playerName.lowercase().contentEquals("bank")) {
-                                                    GlobalInstance.get().addPlayer(Player(playerName, playerColor, false))
-                                                }
-                                            }
-                                        }
-
-                                        GlobalInstance.get().clearLedger()
-
-                                        // iterate all ledger entries the server tells us
-                                        for (ledgerEntry in ledger.split(";")) {
-                                            if (ledgerEntry.contains(":")) {
-                                                val a_foo = ledgerEntry.split(":")
-
-                                                if (a_foo.size == 4) {
-                                                    val tid = a_foo[0].toInt()
-                                                    val from = a_foo[1]
-                                                    val to = a_foo[2]
-                                                    val amount = a_foo[3].toInt()
-
-                                                    if (tid == -1) {
-                                                        GlobalInstance.get().b_serverClosed = true
-                                                    }
-
-                                                    GlobalInstance.get().addLedger(Message(tid, from, to, amount), false)
-                                                }
+                                                GlobalInstance.get().addLedger(Message(tid, from, to, amount), false)
                                             }
                                         }
                                     }
-                                } else {
-                                    net.forestany.forestj.lib.Global.ilogWarning("could not receive any answer data")
                                 }
+                            } else {
+                                net.forestany.forestj.lib.Global.ilogWarning("could not receive any answer data")
                             }
 
-                            sleep(1000)
+                            sleep(GlobalInstance.get().getPreferences()["communication_wait"].toString().toLong())
                         }
-                    } catch (o_exc: RuntimeException) {
-                        /* ignore if communication is not running */
                     } catch (o_exc: java.lang.Exception) {
                         net.forestany.forestj.lib.Global.logException(o_exc)
                     }

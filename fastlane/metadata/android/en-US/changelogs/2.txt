@@ -1,0 +1,6 @@
+Version Highlights:
+
+- Updated for Android Studio Panda 2 | 2025.3.2
+- Improved communication to tcp bidirectional model instead of independent client-server-requests
+- Added communication and bidirectional timeout settings
+- Added ping settings to show milliseconds in main activity to check connectivity

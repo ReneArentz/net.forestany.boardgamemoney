@@ -64,11 +64,14 @@ class MainActivity : AppCompatActivity() {
 
         const val SETTINGS_GENERAL_CURRENCY_TEXT = "€"
         const val SETTINGS_GENERAL_SHOW_EVENTS = "false"
+        const val SETTINGS_GENERAL_SHOW_PING = "false"
         const val SETTINGS_UDP_NETWORK_INTERFACE_NAME = "wlan0"
         const val SETTINGS_UDP_MULTICAST_IP = "224.0.0.1" //"FF05:0:0:0:0:0:0:342"
         const val SETTINGS_UDP_MULTICAST_PORT = "12805"
         const val SETTINGS_UDP_MULTICAST_TTL = "5"
         const val SETTINGS_TCP_SERVER_PORT = "12365"
+        const val SETTINGS_COMMUNICATION_WAIT = "500"
+        const val SETTINGS_BIDIRECTIONAL_TIMEOUT = "50"
         const val SETTINGS_TCP_COMMON_PASSPHRASE = "1234567890abcdefghijklmnopqrstuvwxyz"
         const val SETTINGS_TCP_ENCRYPTION = "false"
 
@@ -95,9 +98,9 @@ class MainActivity : AppCompatActivity() {
                         if (i == 0) {
                             gameStateTemp.timestamp = net.forestany.forestj.lib.Helper.fromISO8601UTC(line)
                         } else if (i == 1) {
-                            gameStateTemp.userType = line!!
+                            gameStateTemp.userType = line
                         } else if (i == 2) {
-                            val a_foo = line!!.split("|")
+                            val a_foo = line.split("|")
 
                             if (a_foo.size == 3) {
                                 gameStateTemp.gameName = a_foo[0]
@@ -105,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                                 gameStateTemp.serverPort = a_foo[2]
                             }
                         } else if (i == 3) {
-                            val a_foo = line!!.split("|")
+                            val a_foo = line.split("|")
 
                             if (a_foo.size == 3) {
                                 gameStateTemp.userName = a_foo[0]
@@ -119,13 +122,13 @@ class MainActivity : AppCompatActivity() {
                                 readLedger = true
                                 readPlayers = false
                             } else if (readPlayers) {
-                                val a_foo = line!!.split("|")
+                                val a_foo = line.split("|")
 
                                 if (a_foo.size == 3) {
                                     gameStateTemp.players.add(Player(a_foo[0], a_foo[1], a_foo[2].contentEquals("true")))
                                 }
                             } else if (readLedger) {
-                                val a_foo = line!!.split(":")
+                                val a_foo = line.split(":")
 
                                 if (a_foo.size == 4) {
                                     gameStateTemp.ledger.add(Message(a_foo[0].toInt(), a_foo[1], a_foo[2], a_foo[3].toInt()))
@@ -137,7 +140,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     inputStream.close()
-                } catch (e: java.io.IOException) {
+                } catch (_: java.io.IOException) {
                     gameStateTemp = null
                 }
             }
@@ -468,18 +471,19 @@ class MainActivity : AppCompatActivity() {
             GlobalInstance.get().s_userColor = gameState?.userNameColor!!
             launcher.launch(intent)
         } else {
-            /*val intent = Intent(this, BankActivity::class.java)
-            intent.putExtra("GAME_NAME", "test game name")
-            intent.putExtra("GAME_USER", "creator")
-            intent.putExtra("GAME_USER_COLOR", "#FFAAFF")
-            intent.putExtra("ONLY_BANK", "0")
-            intent.putExtra("LOAD_GAME_STATE", "0")
-            intent.putExtra("NETWORK_INTERFACE", "192.168.178.22:${GlobalInstance.get().getPreferences()["tcp_server_port"]}")
-            GlobalInstance.get().b_isServer = true
-            GlobalInstance.get().s_user = "creator"
-            GlobalInstance.get().s_userColor = "#FFAAFF"
-            launcher.launch(intent)
-            return@showFindGameDialog*/
+//            val intent = Intent(this, BankActivity::class.java)
+//            intent.putExtra("GAME_NAME", "test game name")
+//            intent.putExtra("GAME_USER", "creator")
+//            intent.putExtra("GAME_USER_COLOR", "#FFAAFF")
+//            intent.putExtra("ONLY_BANK", "0")
+//            intent.putExtra("LOAD_GAME_STATE", "0")
+//            //intent.putExtra("NETWORK_INTERFACE", "192.168.178.22:${GlobalInstance.get().getPreferences()["tcp_server_port"]}")
+//            intent.putExtra("NETWORK_INTERFACE", "0.0.0.0:11365")
+//            GlobalInstance.get().b_isServer = true
+//            GlobalInstance.get().s_user = "creator"
+//            GlobalInstance.get().s_userColor = "#FFAAFF"
+//            launcher.launch(intent)
+//            return@showCreateGameDialog
 
             val dialogView = View.inflate(this, R.layout.dialog_create_or_join_game, null)
             val cB_bankOnly = dialogView.findViewById<CheckBox>(R.id.cB_bank_only)
@@ -514,7 +518,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onCancel(dialog: AmbilWarnaDialog?) {
-                        // nothing happens if cancelled
+                        // nothing happens if canceled
                     }
                 })
                 colorPicker.show()
@@ -604,17 +608,18 @@ class MainActivity : AppCompatActivity() {
             GlobalInstance.get().s_userColor = gameState?.userNameColor!!
             launcher.launch(intent)
         } else {
-            /*val intent = Intent(this, BankActivity::class.java)
-            intent.putExtra("GAME_NAME", "test game name")
-            intent.putExtra("GAME_USER", "player")
-            intent.putExtra("GAME_USER_COLOR", "#00FF00")
-            intent.putExtra("ONLY_BANK", "0")
-            intent.putExtra("LOAD_GAME_STATE", "0")
-            intent.putExtra("NETWORK_INTERFACE", "192.168.178.22:${GlobalInstance.get().getPreferences()["tcp_server_port"]}")
-            GlobalInstance.get().s_user = "player"
-            GlobalInstance.get().s_userColor = "#00FF00"
-            launcher.launch(intent)
-            return@showFindGameDialog*/
+//            val intent = Intent(this, BankActivity::class.java)
+//            intent.putExtra("GAME_NAME", "test game name")
+//            intent.putExtra("GAME_USER", "player")
+//            intent.putExtra("GAME_USER_COLOR", "#00FF00")
+//            intent.putExtra("ONLY_BANK", "0")
+//            intent.putExtra("LOAD_GAME_STATE", "0")
+//            //intent.putExtra("NETWORK_INTERFACE", "192.168.178.22:${GlobalInstance.get().getPreferences()["tcp_server_port"]}")
+//            intent.putExtra("NETWORK_INTERFACE", "10.0.2.2:12365")
+//            GlobalInstance.get().s_user = "player"
+//            GlobalInstance.get().s_userColor = "#00FF00"
+//            launcher.launch(intent)
+//            return@showFindGameDialog
 
             val dialogView = View.inflate(this, R.layout.dialog_create_or_join_game, null)
             val cB_bankOnly = dialogView.findViewById<CheckBox>(R.id.cB_bank_only)
@@ -638,7 +643,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onCancel(dialog: AmbilWarnaDialog?) {
-                        // nothing happens if cancelled
+                        // nothing happens if canceled
                     }
                 })
                 colorPicker.show()
@@ -706,7 +711,7 @@ class MainActivity : AppCompatActivity() {
                     holder.tvName.text = player.name
                     holder.tvName.setBackgroundColor(player.color)
                     holder.btnDelete.setOnClickListener {
-                        val pos = holder.adapterPosition
+                        val pos = holder.bindingAdapterPosition
                         if (pos != RecyclerView.NO_POSITION) {
                             players.removeAt(pos)
                             notifyItemRemoved(pos)
@@ -838,11 +843,14 @@ class MainActivity : AppCompatActivity() {
             (!sharedPreferences.contains("general_locale")) ||
             (!sharedPreferences.contains("general_currency_text")) ||
             (!sharedPreferences.contains("general_show_events")) ||
+            (!sharedPreferences.contains("general_show_ping")) ||
             (!sharedPreferences.contains("udp_network_interface_name")) ||
             (!sharedPreferences.contains("udp_multicast_ip")) ||
             (!sharedPreferences.contains("udp_multicast_port")) ||
             (!sharedPreferences.contains("udp_multicast_ttl")) ||
             (!sharedPreferences.contains("tcp_server_port")) ||
+            (!sharedPreferences.contains("communication_wait")) ||
+            (!sharedPreferences.contains("bidirectional_timeout")) ||
             (!sharedPreferences.contains("tcp_common_passphrase")) ||
             (!sharedPreferences.contains("tcp_encryption"))
         ) {
@@ -859,11 +867,14 @@ class MainActivity : AppCompatActivity() {
 
                 if (!sharedPreferences.contains("general_currency_text")) putString("general_currency_text", SETTINGS_GENERAL_CURRENCY_TEXT)
                 if (!sharedPreferences.contains("general_show_events")) putBoolean("general_show_events", SETTINGS_GENERAL_SHOW_EVENTS.contentEquals("true"))
+                if (!sharedPreferences.contains("general_show_ping")) putBoolean("general_show_ping", SETTINGS_GENERAL_SHOW_PING.contentEquals("true"))
                 if (!sharedPreferences.contains("udp_network_interface_name")) putString("udp_network_interface_name", SETTINGS_UDP_NETWORK_INTERFACE_NAME)
                 if (!sharedPreferences.contains("udp_multicast_ip")) putString("udp_multicast_ip", SETTINGS_UDP_MULTICAST_IP)
                 if (!sharedPreferences.contains("udp_multicast_port")) putString("udp_multicast_port", SETTINGS_UDP_MULTICAST_PORT)
                 if (!sharedPreferences.contains("udp_multicast_ttl")) putString("udp_multicast_ttl", SETTINGS_UDP_MULTICAST_TTL)
                 if (!sharedPreferences.contains("tcp_server_port")) putString("tcp_server_port", SETTINGS_TCP_SERVER_PORT)
+                if (!sharedPreferences.contains("communication_wait")) putString("communication_wait", SETTINGS_COMMUNICATION_WAIT)
+                if (!sharedPreferences.contains("bidirectional_timeout")) putString("bidirectional_timeout", SETTINGS_BIDIRECTIONAL_TIMEOUT)
                 if (!sharedPreferences.contains("tcp_common_passphrase")) putString("tcp_common_passphrase", SETTINGS_TCP_COMMON_PASSPHRASE)
                 if (!sharedPreferences.contains("tcp_encryption")) putBoolean("tcp_encryption", SETTINGS_TCP_ENCRYPTION.contentEquals("true"))
             }

@@ -99,6 +99,7 @@
     <string name="settings_general_locale">Spracheinstellungen</string>
     <string name="settings_general_currency_text">Währungssymbol (1–3 Zeichen)</string>
     <string name="settings_general_show_events">Events anzeigen</string>
+    <string name="settings_general_show_ping">Zeige Ping</string>
 
     <string name="settings_category_udp_settings">UDP Einstellungen</string>
     <string name="settings_udp_network_interface_name">UDP Netzwerkschnittstellen-Name</string>
@@ -108,11 +109,18 @@
 
     <string name="settings_category_tcp_settings">TCP Einstellungen</string>
     <string name="settings_tcp_server_port">Server Port</string>
+    <string name="settings_general_communication_wait">Kommunikation Wartezeit(ms)</string>
+    <string name="settings_general_communication_wait_summary">Wählen Sie einen Wert zwischen 1 und 2500</string>
+    <string name="settings_general_bidirectional_timeout">Bidirektionales Timeout(ms)</string>
+    <string name="settings_general_bidirectional_timeout_summary">Wählen Sie einen Wert zwischen 1 und 200</string>
     <string name="settings_tcp_common_passphrase">Gemeinsames Passwort</string>
     <string name="settings_tcp_encryption">Verschlüsselung aktiv</string>
 
     <string name="settings_password_dialog_fragment_key_missing">Der Präferenzschlüssel für das Passwortdialogfeld ist erforderlich.</string>
     <string name="settings_password_dialog_fragment_title_missing">Der Titel für das Passwortdialogfeld ist erforderlich.</string>
+
+    <string name="settings_slider_dialog_fragment_key_missing">Der Präferenzschlüssel für den Schieberegler ist erforderlich.</string>
+    <string name="settings_slider_dialog_fragment_title_missing">Der Titel für den Schieberegler ist erforderlich.</string>
 
     <string name="settings_language_changed">Sprache geändert. Die App wird neu gestartet in %1$d sek.</string>
     <string name="settings_value_empty">Der Einstellwert darf nicht leer sein.</string>

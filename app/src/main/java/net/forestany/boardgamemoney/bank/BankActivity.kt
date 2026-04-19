@@ -37,6 +37,7 @@ class BankActivity : AppCompatActivity() {
         private const val TAG = "BankActivity"
     }
 
+    private lateinit var ping: TextView
     private lateinit var playerIcon: ImageView
     private lateinit var playerName: TextView
     private lateinit var playerMoney: TextView
@@ -97,6 +98,7 @@ class BankActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.app_name)
 
         //region layout elements
+        ping = findViewById(R.id.ping)
         playerIcon = findViewById(R.id.playerIcon)
         playerName = findViewById(R.id.playerName)
         playerMoney = findViewById(R.id.playerMoney)
@@ -511,6 +513,15 @@ class BankActivity : AppCompatActivity() {
                             )
                         }
                     }
+
+                    // update ping if activated and network
+                    if ((GlobalInstance.get().getPreferences()["general_show_ping"] as Boolean) && (isNetworkBank) && (!localBank)) {
+                        val s_foo = "${GlobalInstance.get().getPing()} ms"
+                        ping.text = s_foo
+                        ping.visibility = View.VISIBLE
+                    } else {
+                        ping.visibility = View.GONE
+                    }
                 }
 
                 // save game state all 10 seconds
@@ -589,9 +600,11 @@ class BankActivity : AppCompatActivity() {
                     break
                 }
 
-                Thread.sleep(1000)
+                Thread.sleep(GlobalInstance.get().getPreferences()["communication_wait"].toString().toLong())
             } catch (_: InterruptedException) {
                 break
+            } catch (e: Exception) {
+                e.printStackTrace()
             } finally {
                 count++
             }

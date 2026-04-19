@@ -380,6 +380,16 @@
                 android:background="@android:color/transparent" />
 
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/ping"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|top|end"
+            android:text="99 ms"
+            android:textSize="8sp"
+            android:textColor="@color/colorOnBackground" />
+
     </LinearLayout>
 
     <com.google.android.material.appbar.MaterialToolbar

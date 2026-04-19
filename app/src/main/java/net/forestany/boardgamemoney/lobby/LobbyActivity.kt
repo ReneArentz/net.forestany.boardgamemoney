@@ -136,7 +136,7 @@ class LobbyActivity : AppCompatActivity() {
                             adapter.updateAllData(l_list)
                         }
 
-                        sleep(5000)
+                        sleep(2500)
                     } catch (_: InterruptedException) {
                         break
                     }
@@ -228,7 +228,7 @@ class LobbyActivity : AppCompatActivity() {
             })
 
             eT_game.hint = getString(R.string.lobby_join_manually_port)
-            eT_game.setKeyListener(android.text.method.DigitsKeyListener.getInstance("0123456789"))
+            eT_game.keyListener = android.text.method.DigitsKeyListener.getInstance("0123456789")
 
             showAlertDialog(getString(R.string.lobby_join_manually_title), dialogView) {
                 val s_serverIp = eT_user.text

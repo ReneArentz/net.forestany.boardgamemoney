@@ -13,7 +13,7 @@ import net.forestany.boardgamemoney.GlobalInstance
 class LedgerEntryAdapter(
     private val ledgerEntries: List<Message>
 ) : RecyclerView.Adapter<LedgerEntryAdapter.LedgerEntryAdapterViewHolder>() {
-    inner class LedgerEntryAdapterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class LedgerEntryAdapterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val ledgerEntryIndex: TextView = view.findViewById(R.id.ledgerEntryIndex)
         private val ledgerEntryFromColor: View = view.findViewById(R.id.ledgerEntryFromColor)
         private val ledgerEntryFromName: TextView = view.findViewById(R.id.ledgerEntryFromName)

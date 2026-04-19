@@ -25,7 +25,7 @@ class LobbyViewAdapter(
 
     private var selectedElement: View? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LobbyViewAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
         return ViewHolder(view)
     }
@@ -34,7 +34,7 @@ class LobbyViewAdapter(
         return list.size
     }
 
-    override fun onBindViewHolder(holder: LobbyViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position < list.size) {
             holder.bind(position, list[position])
         } else {

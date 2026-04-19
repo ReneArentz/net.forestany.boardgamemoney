@@ -1,6 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+}
+
+kotlin {
+    compilerOptions {
+        languageVersion = org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
+    }
 }
 
 android {
@@ -9,10 +15,10 @@ android {
 
     defaultConfig {
         applicationId = "net.forestany.boardgamemoney"
-        minSdk = 29
+        minSdk = 27
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -28,14 +34,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "21"
-    }
     sourceSets {
         getByName("main") {
-            res {
-                srcDirs("src/main/res", "src/main/res/menu")
-            }
+            res.directories.add("src/main/res")
         }
     }
     dependenciesInfo {
@@ -56,6 +57,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("net.forestany.forestj.net:fJ-net-lib:1.0.4")
+    implementation("net.forestany.forestj.net:fJ-net-lib:1.0.5")
     implementation("com.github.yukuku:ambilwarna:2.0.1")
 }

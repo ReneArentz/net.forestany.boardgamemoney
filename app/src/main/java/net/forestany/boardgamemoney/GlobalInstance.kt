@@ -37,6 +37,25 @@ class GlobalInstance {
     var s_user: String = "NO_USER_SPECIFIED"
     var s_userColor: String = "NO_USER_COLOR_SPECIFIED"
 
+    private val o_lockPing = ReentrantLock()
+    private var l_ping: Long = 0
+
+    fun getPing(): Long {
+        var l_foo: Long
+
+        o_lockPing.withLock {
+            l_foo = l_ping
+        }
+
+        return l_foo
+    }
+
+    fun setPing(p_l_value: Long) {
+        o_lockPing.withLock {
+            l_ping = p_l_value
+        }
+    }
+
     private var o_lockLobbyEntries = ReentrantLock()
     private var m_clientLobbyEntries: MutableMap<java.time.LocalDateTime, String> = HashMap()
 

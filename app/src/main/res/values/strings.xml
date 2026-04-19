@@ -99,6 +99,7 @@
     <string name="settings_general_locale">Language</string>
     <string name="settings_general_currency_text">Currency symbol (1–3 characters)</string>
     <string name="settings_general_show_events">Show events</string>
+    <string name="settings_general_show_ping">Show Ping</string>
 
     <string name="settings_category_udp_settings">UDP Settings</string>
     <string name="settings_udp_network_interface_name">UDP Network Interface Name</string>
@@ -108,11 +109,18 @@
 
     <string name="settings_category_tcp_settings">TCP Settings</string>
     <string name="settings_tcp_server_port">Server Port</string>
+    <string name="settings_general_communication_wait">Communication Wait(ms)</string>
+    <string name="settings_general_communication_wait_summary">Choose a value between 1 and 2500</string>
+    <string name="settings_general_bidirectional_timeout">Bidirectional Timeout(ms)</string>
+    <string name="settings_general_bidirectional_timeout_summary">Choose a value between 1 and 200</string>
     <string name="settings_tcp_common_passphrase">Common Passphrase</string>
     <string name="settings_tcp_encryption">Use encryption</string>
 
     <string name="settings_password_dialog_fragment_key_missing">Preference key for password dialog fragment is required.</string>
     <string name="settings_password_dialog_fragment_title_missing">Title for password dialog fragment is required.</string>
+
+    <string name="settings_slider_dialog_fragment_key_missing">Preference key for slider dialog fragment is required.</string>
+    <string name="settings_slider_dialog_fragment_title_missing">Title for slider dialog fragment is required.</string>
 
     <string name="settings_language_changed">Language changed. App will restart in %1$d sec.</string>
     <string name="settings_value_empty">Setting value must not be empty.</string>
